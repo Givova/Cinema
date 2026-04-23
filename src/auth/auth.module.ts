@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
-import { TypegooseModule } from 'node_modules/@m8a/nestjs-typegoose/dist';
+import { TypegooseModule } from '@m8a/nestjs-typegoose';
 import { UserModel } from 'src/user/user.model';
-import { ConfigModule, ConfigService } from 'node_modules/@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { getJWTConfig } from 'src/config/jwt.config';
 import { JwtStrategy } from './strategies/jwt.strategy';
