@@ -1,4 +1,3 @@
-// import { Controller } from '@nestjs/common';
 import {
 	Body,
 	Controller,
@@ -12,34 +11,37 @@ import {
 	UsePipes,
 	ValidationPipe,
 } from '@nestjs/common'
+import { ActorDto } from './actor.dto'
 import { Auth } from 'src/auth/decorators/auth.decorator'
 import { IdValidationPipe } from 'src/pipes/id.validation.pipe'
-import { CreateGenreDto } from './dto/create-genre.dto'
-import { GenreService } from './genre.service'
+import { ActorService } from './actor.service'
 
-@Controller('genres')
-export class GenreController {
-	constructor(private readonly genreService: GenreService) {}
+@Controller('actors')
+export class ActorController {
+	constructor(private readonly actorService: ActorService) {}
 
 	@Get('by-slug/:slug')
 	async bySlug(@Param('slug') slug: string) {
-		return this.genreService.bySlug(slug)
-	}
-
-	@Get('/collections')
-	async getCollections() {
-		return this.genreService.getCollections()
+		return this.actorService.bySlug(slug)
 	}
 
 	@Get()
 	async getAll(@Query('searchTerm') searchTerm?: string) {
-		return this.genreService.getAll(searchTerm)
+		return this.actorService.getAll(searchTerm)
 	}
 
 	@Get(':id')
 	@Auth('admin')
 	async get(@Param('id', IdValidationPipe) id: string) {
-		return this.genreService.byId(id)
+		return this.actorService.byId(id)
+	}
+
+	@UsePipes(new ValidationPipe())
+	@Post()
+	@HttpCode(200)
+	@Auth('admin')
+	async create() {
+		return this.actorService.create()
 	}
 
 	@UsePipes(new ValidationPipe())
@@ -48,23 +50,15 @@ export class GenreController {
 	@Auth('admin')
 	async update(
 		@Param('id', IdValidationPipe) id: string,
-		@Body() dto: CreateGenreDto
+		@Body() dto: ActorDto
 	) {
-		return this.genreService.update(id, dto)
-	}
-
-	@UsePipes(new ValidationPipe())
-	@Post()
-	@HttpCode(200)
-	@Auth('admin')
-	async create() {
-		return this.genreService.create()
+		return this.actorService.update(id, dto)
 	}
 
 	@Delete(':id')
 	@HttpCode(200)
 	@Auth('admin')
 	async delete(@Param('id', IdValidationPipe) id: string) {
-		return this.genreService.delete(id)
+		return this.actorService.delete(id)
 	}
 }
